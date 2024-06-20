@@ -22,6 +22,8 @@ jobs:
         with:
           files: |
             '!./github/workflows/**.yml'
+            *.py
+            *.sql
 
       - name: List all added files
         run: |
