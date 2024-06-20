@@ -21,5 +21,9 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
-        run : git diff HEAD HEAD~
+      - name: Git diff 
+        uses: actions/checkout@v4
+      - name: Git diff HEAD and HEAD~
+        run: |
+          git fetch origin  # Fetch latest changes from remote
+          git diff HEAD HEAD~
