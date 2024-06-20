@@ -21,6 +21,7 @@ jobs:
         uses: tj-actions/changed-files@v32
         with:
           files: '!./github/workflows/*.yml'
+
       - name: List all added files
         run: |
          for file in ${{steps.changed-files.outputs.all_changed_files}}; do
