@@ -30,5 +30,6 @@ jobs:
          done
          for file in ${{steps.changed-files.outputs.added_files}}; do
           echo "$file was added."
+          done
 
 
