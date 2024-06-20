@@ -19,9 +19,6 @@ jobs:
       - name: Fetch latest changes
         run: git fetch origin
 
-      - name: Git fetch HEAD
-        run: git fetch origin HEAD
-
       - name: Determine parent commit
         id: find_parent_commit
         run: |
@@ -29,12 +26,20 @@ jobs:
           PARENT_COMMIT=$(git rev-parse --short HEAD^ || echo "None")
           echo "::set-output name=parent_commit::$PARENT_COMMIT"
 
-      - name: Git diff HEAD and parent commit
+      - name: List added and modified files
+        id: list_changed_files
         run: |
           PARENT_COMMIT="${{ steps.find_parent_commit.outputs.parent_commit }}"
           if [ "$PARENT_COMMIT" != "None" ]; then
-            git diff $PARENT_COMMIT HEAD --
+            git diff --name-status $PARENT_COMMIT HEAD | grep -E '^(A|M)' | cut -f2-
           else
-            echo "No parent commit found to compare."
+            git ls-files  # List all files if no parent commit (initial commit)
           fi
+        shell: bash
+
+      - name: Output files
+        run: |
+          echo "Changed files:"
+          echo "${{ steps.list_changed_files.outputs.stdout }}"
+
 
