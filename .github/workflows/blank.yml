@@ -26,4 +26,4 @@ jobs:
       - name: Git diff HEAD and HEAD~
         run: |
           git fetch origin  # Fetch latest changes from remote
-          git diff HEAD HEAD~
+          git diff HEAD HEAD~ --
