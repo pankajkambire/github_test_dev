@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build:
@@ -16,30 +15,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch latest changes
-        run: git fetch origin
-
-      - name: Determine parent commit
-        id: find_parent_commit
-        run: |
-          # Capture parent commit hash if available
-          PARENT_COMMIT=$(git rev-parse --short HEAD^ || echo "None")
-          echo "::set-output name=parent_commit::$PARENT_COMMIT"
-
-      - name: List added and modified files
-        id: list_changed_files
-        run: |
-          PARENT_COMMIT="${{ steps.find_parent_commit.outputs.parent_commit }}"
-          if [ "$PARENT_COMMIT" != "None" ]; then
-            git diff --name-status $PARENT_COMMIT HEAD | grep -E '^(A|M)' | cut -f2-
-          else
-            git ls-files  # List all files if no parent commit (initial commit)
-          fi
-        shell: bash
-
-      - name: Output files
-        run: |
-          echo "Changed files:"
-          echo "${{ steps.list_changed_files.outputs.stdout }}"
+      - name: get changed files
+        id: change-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: | 
+            *.py
 
 
